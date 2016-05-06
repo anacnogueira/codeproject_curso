@@ -3,15 +3,15 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-use CodeProject\Services\ClientService;
-use CodeProject\Repositories\ClientRepository;
+use CodeProject\Services\ProjectService;
+use CodeProject\Repositories\ProjectRepository;
 
-class ClientController extends Controller
+class ProjectController extends Controller
 {
     private $repository;
     private $service;
 
-    public function __construct(ClientRepository $repository, ClientService $service)
+    public function __construct(ProjectRepository $repository, ProjectService $service)
     {
         $this->repository = $repository;
         $this->service = $service;
@@ -20,7 +20,7 @@ class ClientController extends Controller
     public function index()
     {
     	
-    	return $this->repository->all();
+    	return $this->repository->with(['owner','client'])->all();
     }
 
     public function store(Request $request)
@@ -41,8 +41,8 @@ class ClientController extends Controller
 
     public function destroy($id)
     {
-    	return $this->repository->delete($id);
+    	$project = $this->repository->delete($id);
 
-    	
+    	if ($project) return response()->json(['msg'=>'OK'], 200);
     }
 }
