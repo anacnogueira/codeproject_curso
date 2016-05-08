@@ -3,6 +3,7 @@ namespace CodeProject\Services;
 
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Validators\ProjectValidator;
+use \Prettus\Validator\Exceptions\ValidatorException;
 
 
 class ProjectService
