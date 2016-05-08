@@ -5,7 +5,6 @@ use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Validators\ProjectValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 
-
 class ProjectService
 {
 	protected $repository;
@@ -15,6 +14,12 @@ class ProjectService
 	{
 		$this->repository = $repository;
 		$this->validator = $validator;
+	}
+
+
+	public function find($id){
+		$this->repository->find($id);
+		
 	}
 
 	public function create(array $data)

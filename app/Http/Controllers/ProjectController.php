@@ -30,7 +30,7 @@ class ProjectController extends Controller
 
     public function show($id)
     {
-    	return $this->repository->find($id);
+        return $this->service->find($id);
     }
 
     public function update(Request $request, $id)
