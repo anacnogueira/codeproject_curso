@@ -36,10 +36,9 @@ class ProjectNoteController extends Controller
     public function update(Request $request, $id, $noteId)
     {
     	return $this->service->update($request->all(), $noteId);
-
     }
 
-    public function destroy($id, noteId)
+     public function destroy($id, $noteId)
     {
     	try {
             $this->repository->find($noteId)->delete();
