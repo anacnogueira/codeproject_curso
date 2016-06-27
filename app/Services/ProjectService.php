@@ -1,6 +1,8 @@
 <?php
 namespace CodeProject\Services;
 
+use Storage;
+use File;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Repositories\ProjectMembersRepository;
 use CodeProject\Validators\ProjectValidator;
@@ -104,6 +106,12 @@ class ProjectService
 			'project_id'=>$id,
 			'user_id' => $memberId
 		]);		
+	}
+
+	public function createFile(array $data)
+	{
+		Storage::put($data['name'].'.'.$data['extension'], File::get($data['file']));
+
 	}
 
 }
