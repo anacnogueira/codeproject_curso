@@ -1,8 +1,9 @@
 <?php
 namespace CodeProject\Services;
 
-use Storage;
-use File;
+use	Illuminate\Contracts\Filesystem\Factory as Storage;
+use Illuminate\Filesystem\Filesystem;
+
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Repositories\ProjectMembersRepository;
 use CodeProject\Validators\ProjectValidator;
@@ -15,15 +16,21 @@ class ProjectService
 	protected $repositoryMembers;
 	protected $validator;
 	protected $validatorMembers;
+	protected $filesystem;
+	protected $storage;
 
 	public function __construct(
 		ProjectRepository $repository, 
 		ProjectMembersRepository $repositoryMembers, 
 		ProjectValidator $validator,
-		ProjectMembersValidator $validatorMembers)
+		ProjectMembersValidator $validatorMembers,
+		Filesystem $filesystem,
+		Storage $storage)
 	{
 		$this->repository 			= $repository;
 		$this->repositoryMembers 	= $repositoryMembers;
+		$this->filesystem 			= $filesystem;
+		$this->storage 				= $storage;	
 
 		$this->validator 			= $validator;
 		$this->validatorMembers 	= $validatorMembers;
@@ -110,7 +117,10 @@ class ProjectService
 
 	public function createFile(array $data)
 	{
-		Storage::put($data['name'].'.'.$data['extension'], File::get($data['file']));
+		$project = $this->repository->skipPresenter()->find($data['project_id']);
+		$projectFile = $project->files()->create($data);
+
+		$this->storage->put($projectFile->id.'.'.$data['extension'], $this->filesystem->get($data['file']));
 
 	}
 
