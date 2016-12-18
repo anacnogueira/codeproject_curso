@@ -25,7 +25,7 @@ class ClientService
 		} catch (ValidatorException $e) {
 			return [
                 'error'   =>true,
-                'message' =>$e->getMessageBag()
+                'message' =>$e->getMessage()
             ];
 		}
 
