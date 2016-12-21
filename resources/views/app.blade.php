@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Laravel</title>
 	@if(Config::get('app.debug'))
-		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/bootstrap.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/bootstrap-theme.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/vendor/bootstrap.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/vendor/bootstrap-theme.min.css') }}">
 	@else
 		<link rel="stylesheet" type="text/css" href="{{ elixir('css/all.css') }}">
 	@endif
@@ -63,7 +63,9 @@
 		</div>
 	</nav>
 
-	@yield('content')
+	<div ng-view>
+		
+	</div>
 
 	<!-- Scripts -->
 	@if(Config::get('app.debug'))
@@ -73,8 +75,12 @@
 		<script src="{{ asset('build/js/vendor/angular-resource.min.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/vendor/angular-animate.min.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/vendor/angular-messages.min.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('build/js/vendor/ui-bootsrap.min.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/vendor/ui-bootstrap.min.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/vendor/navbar.min.js') }}" type="text/javascript"></script>
+
+		<script src="{{ asset('build/js/app.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/login.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/home.js') }}" type="text/javascript"></script>
 		
 	@else
 		<script src="{{ elixir('js/all.js') }}" type="text/javascript"></script>

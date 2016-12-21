@@ -6,3 +6,4 @@ Homestead.json
 .env
 /.phpintel
 resources/bower_components
+/docs

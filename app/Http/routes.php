@@ -50,3 +50,6 @@ Route::group(['middleware'=>'oauth'],function(){
 		Route::delete('{id}/task/{taskId}', 'ProjectTaskController@destroy');
 	});
 });
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
