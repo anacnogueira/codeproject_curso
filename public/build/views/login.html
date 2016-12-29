@@ -4,6 +4,10 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Login</div>
                 <div class="panel-body">
+
+                    <div class="alert alert-danger" ng-show="error.error">
+                        <strong>Oops!</strong> Ocorrerar erros.<br><br>
+                    </div>
                     <form class="form-horizontal" name="form" role="form" method="POST" ng-submit="login()">
                         
 
