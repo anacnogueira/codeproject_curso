@@ -1,8 +1,8 @@
 var app = angular.module('app',['ngRoute','app.controllers']);
 
-angular.module('app.controllers', [])
+angular.module('app.controllers',['ngMessages','angular-oauth2']);
 
-app.config([function($routeProvider) {
+app.config(function($routeProvider) {
 	$routeProvider
 		.when('/login',{
 			templateUrl: 'build/views/login.html',
@@ -12,4 +12,4 @@ app.config([function($routeProvider) {
 			templateUrl: 'build/views/home.html',
 			controller: 'HomeController'
 		})
-}])
+});
