@@ -26,13 +26,13 @@ app.config([
 		})
 		.when('/home',{
 			templateUrl: 'build/views/home.html',
-			controller: 'ClientController'
+			controller: 'HomeController'
 		})
 		.when('/clients',{
 			templateUrl: 'build/views/client/list.html',
 			controller: 'ClientListController'
 		});
-	OAuthProvider.conficure({
+	OAuthProvider.configure({
 		baseUrl: appConfigProvider.config.baseUrl,
 		clientId: 'appid1',
 		clientSecret: 'secret',

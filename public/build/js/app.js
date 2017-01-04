@@ -1,4 +1,4 @@
-var app = angular.module('app',['ngRoute','app.controllers']);
+var app = angular.module('app',['ngRoute','angular-oauth2','app.controllers']);
 
 angular.module('app.controllers',['ngMessages','angular-oauth2']);
 
@@ -26,13 +26,13 @@ app.config([
 		})
 		.when('/home',{
 			templateUrl: 'build/views/home.html',
-			controller: 'ClientController'
+			controller: 'HomeController'
 		})
 		.when('/clients',{
 			templateUrl: 'build/views/client/list.html',
 			controller: 'ClientListController'
 		});
-	OAuthProvider.conficure({
+	OAuthProvider.configure({
 		baseUrl: appConfigProvider.config.baseUrl,
 		clientId: 'appid1',
 		clientSecret: 'secret',
@@ -40,16 +40,19 @@ app.config([
 	})	
 }]);
 
-app.run(['$rootScope', '$window', 'OAuth', function($rootScope, $window, OAuth){
-	$rootScope.$on('oauth:error', function(event, rejection){
-		//Ignore `invalid_grant` error - should be catched on `LoginController`
-		if('invalid_grant' === rejection.data.error) {
-			return;
-		}
+app.run(['$rootScope', '$window', 'OAuth', function($rootScope, $window, OAuth) {
+    $rootScope.$on('oauth:error', function(event, rejection) {
+      // Ignore `invalid_grant` error - should be catched on `LoginController`.
+      if ('invalid_grant' === rejection.data.error) {
+        return;
+      }
 
-		//Refresh token when a `invalid_token` error occurs.
-		if('invalid_token' === rejection.data.error) {
+      // Refresh token when a `invalid_token` error occurs.
+      if ('invalid_token' === rejection.data.error) {
+        return OAuth.getRefreshToken();
+      }
 
-		}
-	})
-}])
+      // Redirect to `/login` with the `error_reason`.
+      return $window.location.href = '/login?error_reason=' + rejection.data.error;
+    });
+}]);
