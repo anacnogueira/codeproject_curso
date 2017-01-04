@@ -2,7 +2,23 @@ var app = angular.module('app',['ngRoute','app.controllers']);
 
 angular.module('app.controllers',['ngMessages','angular-oauth2']);
 
-app.config(function($routeProvider) {
+app.provider('appConfig', function(){
+	var config = {
+		baseUrl: 'http://projects-api.dev',
+
+	};
+
+	return {
+		config: config,
+		$get: function(){
+			return config;
+		}
+	}
+});
+
+app.config([
+	'$routeProvider', 'OAuthProvider', 'appConfigProvider',
+	function($routeProvider, OAuthProvider, appConfigProvider) {
 	$routeProvider
 		.when('/login',{
 			templateUrl: 'build/views/login.html',
@@ -10,6 +26,30 @@ app.config(function($routeProvider) {
 		})
 		.when('/home',{
 			templateUrl: 'build/views/home.html',
-			controller: 'HomeController'
+			controller: 'ClientController'
 		})
-});
+		.when('/clients',{
+			templateUrl: 'build/views/client/list.html',
+			controller: 'ClientListController'
+		});
+	OAuthProvider.conficure({
+		baseUrl: appConfigProvider.config.baseUrl,
+		clientId: 'appid1',
+		clientSecret: 'secret',
+		grantPath: 'oauth/access_token'
+	})	
+}]);
+
+app.run(['$rootScope', '$window', 'OAuth', function($rootScope, $window, OAuth){
+	$rootScope.$on('oauth:error', function(event, rejection){
+		//Ignore `invalid_grant` error - should be catched on `LoginController`
+		if('invalid_grant' === rejection.data.error) {
+			return;
+		}
+
+		//Refresh token when a `invalid_token` error occurs.
+		if('invalid_token' === rejection.data.error) {
+
+		}
+	})
+}])
