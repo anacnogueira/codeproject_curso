@@ -30,9 +30,14 @@ app.config([
 			templateUrl: 'build/views/home.html',
 			controller: 'HomeController'
 		})
+		// Clients
 		.when('/clients',{
 			templateUrl: 'build/views/client/list.html',
 			controller: 'ClientListController'
+		})
+		.when('/clients/:id',{
+			templateUrl: 'build/views/client/view.html',
+			controller: 'ClientViewController'
 		})
 		.when('/clients/new',{
 			templateUrl: 'build/views/client/new.html',
@@ -41,6 +46,32 @@ app.config([
 		.when('/clients/:id/edit',{
 			templateUrl: 'build/views/client/edit.html',
 			controller: 'ClientEditController'
+		})
+		.when('/clients/:id/remove',{
+			templateUrl: 'build/views/client/remove.html',
+			controller: 'ClientRemoveController'
+		})
+
+		// Project Notes
+		.when('/project/:id/notes',{
+			templateUrl: 'build/views/note/list.html',
+			controller: 'NoteListController'
+		})
+		.when('/project/:id/notes/:idNote',{
+			templateUrl: 'build/views/note/view.html',
+			controller: 'NoteViewController'
+		})
+		.when('/project/:id/notes/new',{
+			templateUrl: 'build/views/note/new.html',
+			controller: 'NoteNewController'
+		})
+		.when('/project/:id/notes/:idNote/edit',{
+			templateUrl: 'build/views/note/edit.html',
+			controller: 'NoteEditController'
+		})
+		.when('/project/:id/notes/:idNote/remove',{
+			templateUrl: 'build/views/note/remove.html',
+			controller: 'NoteRemoveController'
 		});
 
 	OAuthProvider.configure({
