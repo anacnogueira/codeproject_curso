@@ -6,8 +6,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Laravel</title>
 	@if(Config::get('app.debug'))
-		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/vendor/bootstrap.min.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/vendor/bootstrap-theme.min.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/app.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/components.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/flaticon.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ asset('build/css/font-awesome.css') }}">
 	@else
 		<link rel="stylesheet" type="text/css" href="{{ elixir('css/all.css') }}">
 	@endif
@@ -87,13 +89,23 @@
 		<!-- Controllers -->
 		<script src="{{ asset('build/js/controllers/login.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/home.js') }}" type="text/javascript"></script>
+		<!-- Clients -->
 		<script src="{{ asset('build/js/controllers/client/clientList.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/client/clientNew.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/client/clientEdit.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/client/clientRemove.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/client/clientView.js') }}" type="text/javascript"></script>
 		
+		<!-- Projects Notes -->
+		<script src="{{ asset('build/js/controllers/project-note/projectNoteList.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectNoteView.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectNoteNew.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectNoteEdit.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectNoteRemove.js') }}" type="text/javascript"></script>
+
 		<!-- Services -->
 		<script src="{{ asset('build/js/services/client.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/services/projectNote.js') }}" type="text/javascript"></script>
 	@else
 		<script src="{{ elixir('js/all.js') }}" type="text/javascript"></script>
 	@endif

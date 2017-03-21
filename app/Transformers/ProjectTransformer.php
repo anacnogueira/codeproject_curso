@@ -21,11 +21,31 @@ class ProjectTransformer extends TransformerAbstract
 			'progress' => $project->progress,
 			'status' => $project->status,
 			'due_date' => $project->due_date,
+			'is_member' => $project->owner_id != \Authorizer::getResourceOwnderId(),
+			'tasks_count' => $project->tasks->count(),
+			'tasks_opened' => $this->CountTasksOpened()
 		];
 	}
 
 	public function includeMembers(Project $project)
 	{
 		return $this->collection($project->members, new ProjectMemberTransformer());
+	}
+
+	public function includeNotes(Project $project) 
+	{
+		return $this->collection($project->notes, new ProjectNoteTransformer());
+	}
+
+	public function countTasksOpened(Project $project)
+	{
+		$count = 0;
+		foreach ($project->tasks as $o) {
+			if($o->status == 1){
+				$count++;
+			}
+		}
+
+		return $count;
 	}
 }

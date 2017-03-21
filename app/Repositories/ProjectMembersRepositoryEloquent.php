@@ -2,11 +2,10 @@
 
 namespace CodeProject\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
-use CodeProject\Repositories\ProjectMembersRepository;
 use CodeProject\Entities\ProjectMembers;
-use CodeProject\Validators\ProjectMembersValidator;
+use CodeProject\Presenters\ProjectMemberPresenter;
+use Prettus\Repository\Eloquent\BaseRepository;
+
 
 /**
  * Class ProjectMembersRepositoryEloquent
@@ -24,23 +23,17 @@ class ProjectMembersRepositoryEloquent extends BaseRepository implements Project
         return ProjectMembers::class;
     }
 
-    /**
-    * Specify Validator class name
-    *
-    * @return mixed
-    */
-    public function validator()
+
+    public function presenter()
     {
-
-        return ProjectMembersValidator::class;
+        return ProjectMemberPresenter::class;
     }
-
 
     /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        $this->pushCriteria(app(\Prettus\Repository\Criteria\RequestCriteria::class));
     }
 }
