@@ -23,33 +23,45 @@ class ProjectNoteController extends Controller
      	return $this->repository->findWhere(['project_id'=>$id]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-    	return $this->service->create($request->all());
+    	$data = $request->all();
+        $data['project_id'] = $id;
+        return $this->service->create($data);
     }
 
     public function show($id, $noteId)
     {
-        return $this->repository->findWhere(['project_id'=>$id,'id'=>$noteId]);
+        $result = $this->repository->findWhere(['project_id'=>$id,'id'=>$noteId]);
+        if(isset($result['data']) && count($result['data']) == 1){
+            $result = [
+                'data' => $result['data'][0]
+            ];
+        }
+
+        return $result;
     }
 
     public function update(Request $request, $id, $noteId)
     {
-    	return $this->service->update($request->all(), $noteId);
+    	$data = $request->all();
+        $data['project_id'] = $id;
+        return $this->service->update($data, $noteId);
     }
 
      public function destroy($id, $noteId)
     {
     	try {
-            $this->repository->find($noteId)->delete();
-            return ['success'=>true, 'Nota deletada com sucesso!'];
+            if ($this->repository->skipPresenter()->find($noteId)->delete()){
+            }    
+            return ['success'=>true, 'message' => 'Nota deletada com sucesso!'];
         } catch (QueryException $e) {
-            return ['error'=>true, 'Nota não pode ser apagada pois existe um ou mais projetos vinculados a ela.'];
+            return ['error'=>true, 'message' => 'Nota não pode ser apagada pois existe um ou mais projetos vinculados a ela.'];
         
         } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'Nota não encontrada.'];
+            return ['error'=>true, 'message' =>'Nota não encontrada.'];
         } catch (\Exception $e) {
-            return ['error'=>true, 'Ocorreu algum erro ao excluir a nota.'];
+            return ['error'=>true, 'message' =>'Ocorreu algum erro ao excluir a nota.'];
         }
     }
 }

@@ -14,13 +14,7 @@ class ProjectNoteService
 	{
 		$this->repository = $repository;
 		$this->validator = $validator;
-	}
-
-
-	public function find($id){
-		$this->repository->find($id);
-		
-	}
+	}	
 
 	public function create(array $data)
 	{

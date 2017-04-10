@@ -2,9 +2,14 @@
 
 namespace CodeProject\Http\Controllers;
 
-use Illuminate\Http\Request;
-use CodeProject\Services\ClientService;
+use Illuminate\Http\Requests;
 use CodeProject\Repositories\ClientRepository;
+use CodeProject\Services\ClientService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 class ClientController extends Controller
 {
@@ -17,10 +22,16 @@ class ClientController extends Controller
         $this->service = $service;
     }
 
-    public function index()
+    public function index(Request $request)
     {
     	
-    	return $this->repository->all();
+    	try{
+            $limit = $request->query->get('limit', 15);
+            return $this->repository->paginate($limit);
+        } catch(\Exception $e) {
+            return$this->errorMsgm('Ocorreu um erro ao listar os clientes.');
+        }
+        //return $this->repository->all();
     }
 
     public function store(Request $request)

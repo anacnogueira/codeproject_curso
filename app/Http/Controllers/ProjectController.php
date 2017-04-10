@@ -5,16 +5,19 @@ namespace CodeProject\Http\Controllers;
 use Illuminate\Http\Request;
 use CodeProject\Services\ProjectService;
 use CodeProject\Repositories\ProjectRepository;
+use CodeProject\Repositories\ProjectTaskRepository;
 
 class ProjectController extends Controller
 {
     private $repository;
     private $service;
+    private $taskRepository;
 
-    public function __construct(ProjectRepository $repository, ProjectService $service)
+    public function __construct(ProjectRepository $repository, ProjectService $service, ProjectTaskRepository $taskRepository)
     {
         $this->repository = $repository;
         $this->service = $service;
+        $this->taskRepository = $taskRepository;
     }
 
     public function index()

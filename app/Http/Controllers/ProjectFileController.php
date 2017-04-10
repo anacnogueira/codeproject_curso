@@ -17,10 +17,20 @@ class ProjectFileController extends Controller
         $this->service = $service;
     }
 
+    public function index($id)
+    {
+        return $this->repository->findWhere(['project_id' =>$id]);
+    }
+
     
     public function store(Request $request)
     {
     	$file = $request->file('file');
+
+        if (!$file) {
+            return $this->errorMsgm("O arquivo é obrigatório");
+        }
+
         $extension = $file->getClientOriginalExtension();
 
         $data['file'] = $file;
@@ -29,8 +39,53 @@ class ProjectFileController extends Controller
         $data['project_id'] = $request->project_id;
         $data['description'] = $request->description;
 
-        $this->service->createFile($data);
-
-        
+        $this->service->create($data);        
     }    
+
+    public function show($projectId, $id)
+    {
+        $this->repository->find($id);
+    }
+
+    public function showFile($projectId, $id)
+    {
+        $filePath = $this->service->getFilePath($id);
+        $fileContent = file_get_contents($filePath);
+        $file64 = base64_encode($fileContent);
+
+        return [
+            'file' => $file64,
+            'size' => filesize($filePath),
+            'name' => $this->service->getFileName($id),
+            'mime_type' => $this->service->getMimeType($id);
+        ];
+    }
+
+    public function update(Request $request, $projectId, $id)
+    {
+        try {
+            return $this->service->update($request->all(), $id);
+        
+        } catch (ModelNotFoundException $e){
+            return $this->errorMsgm('Projeto não encontrado.');
+        } catch (NoActiveAccessTokenException $e) {
+            return $this->errorMsgm('Usuário não está logado.');
+        } catch (\Exception $e) {
+            return $this->errorMsgm('Ocorreu um erro ao atualizar o projeto.');
+        }
+    }
+
+    public function destroy($projectId, $id)
+    {
+        $this->service->delete($id);
+        return ['error'=>false, 'Arquivo deletado com sucesso'];
+    }
+
+    private function errorMsgm($mensagem)
+    {
+        return [
+            'error' => true,
+            'message' => $mensagem
+        ];
+    }
 }
