@@ -2,6 +2,8 @@
 
 namespace CodeProject\Repositories;
 
+use CodeProject\Validators\ClientValidator;
+use Prettus\Repository\Eloquent\RequestCriteria;
 use CodeProject\Entities\Project;
 use Prettus\Repository\Eloquent\BaseRepository;
 use CodeProject\Presenters\ProjectPresenter;
@@ -38,5 +40,10 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
 	public function presenter()
 	{
 		return ProjectPresenter::class;
+	}
+
+	public function validator()
+	{
+		return \CodeProject\Validators\ProjectValidator::class;
 	}
 }
