@@ -27,9 +27,7 @@ class ClientService
                 'error'   =>true,
                 'message' =>$e->getMessage()
             ];
-		}
-
-		
+		}		
 	}
 
 	public function update(array $data, $id)

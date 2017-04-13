@@ -31,39 +31,75 @@ class ClientController extends Controller
         } catch(\Exception $e) {
             return$this->errorMsgm('Ocorreu um erro ao listar os clientes.');
         }
-        //return $this->repository->all();
     }
 
     public function store(Request $request)
     {
-    	return $this->service->create($request->all());
+    	try{
+            return $this->service->create($reques->all());
+        } catch (ValidatorException $e) {
+            return Response::json([
+                'error' => true,
+                'message' => $e->getMessageBag();
+            ], 400)
+        }
+ 
     }
 
     public function show($id)
     {
-    	return $this->repository->find($id);
+    	try {
+            return $this->repository->find($id);
+        } catch (\Exception $e) {
+            return $this->erorMsgm('Ocorreu um erro ao exibir o cliente.')
+        }
+        return $this->repository->find($id);
     }
 
     public function update(Request $request, $id)
     {
-    	return $this->service->update($request->all(), $id);
-
+    	try {
+            return $this->service->update($request->all(), $id);
+        } catch (ModelNotFoundException $e) {
+            return Response::json([
+                'error' => true,
+                'message' => $e->getMessageBag();
+            ], 400);
+        }
     }
 
     public function destroy($id)
     {
         try {
-            $this->repository->find($id)->delete();
-            return ['success'=>true, 'Cliente deletado com sucesso!'];
+            $this->repository->skipPresenter()->find($id)->delete();
+            return [
+                'success'=>true, 
+                'message' => 'Cliente deletado com sucesso!'
+            ];
         } catch (QueryException $e) {
-            return ['error'=>true, 'Cliente não pode ser apagado pois existe um ou mais projetos vinculados a ele.'];
+            return [
+                'error'=>true, 
+                'message' => 'Cliente não pode ser apagado pois existe um ou mais projetos vinculados a ele.'
+            ];
         
         } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'Cliente não encontrado.'];
+            return [
+                'error'=>true, 
+                'message' => 'Cliente não encontrado.'
+            ];
         } catch (\Exception $e) {
-            return ['error'=>true, 'Ocorreu algum erro ao excluir o cliente.'];
-        }
+            return [
+                'error'=>true, 
+                'message' => 'Ocorreu algum erro ao excluir o cliente.'
+            ];
+        }    	
+    }
 
-    	
+    private function errorMsgm($mensagem)
+    {
+        return [
+            'error' => true,
+            'message' => $mensagem
+        ]
     }
 }
