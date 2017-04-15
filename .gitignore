@@ -7,3 +7,4 @@ Homestead.json
 /.phpintel
 resources/bower_components
 /docs
+.phpintel/
