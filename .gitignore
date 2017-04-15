@@ -8,3 +8,4 @@ Homestead.json
 resources/bower_components
 /docs
 .phpintel/
+vendor/
