@@ -26,10 +26,15 @@ class ProjectController extends Controller
         $this->taskRepository = $taskRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-    	
-    	return $this->repository->with(['owner','client'])->findWhere(['owner_id' => \Authorizer::getResourceOwnerId()]);
+    	try {
+            return $this->repository->findOwner(Authorizer::getResourceOwnerId(), $request->query->get('limit'));
+        } catch (NoActiveAccessTokenException $e) {
+            return $this->erroMsgm('Usuário não está logado.');
+        } catch (\Exception $e) {
+            return $this->erroMsgm('Ocorreu um erro ao listar os projetos. Erro: ' . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -97,4 +102,14 @@ class ProjectController extends Controller
 
         return false;
     }
+
+        private function erroMsgm($mensagem)
+    {
+        return [
+            'error' => true,
+            'message' => $mensagem,
+        ];
+    }
+
+    
 }

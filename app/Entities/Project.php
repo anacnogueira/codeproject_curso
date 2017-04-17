@@ -38,7 +38,7 @@ class Project extends Model
 
     public function members()
     {
-        return $this->belongsToMany('CodeProject\Entities\User','project_members','project_id', 'member_id');
+        return $this->belongsToMany('CodeProject\Entities\User','project_members','project_id', 'id');
     }
 
     public function files()

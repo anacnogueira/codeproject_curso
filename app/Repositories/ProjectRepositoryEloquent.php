@@ -15,6 +15,12 @@ class ProjectRepositoryEloquent extends BaseRepository implements ProjectReposit
 		return Project::class;
 	}
 
+	public function findOwner($userId, $limit = null, $columns = []){
+        return $this->scopeQuery(function($query) use($userId){
+            return $query->select('projects.*')->where('owner_id','=',$userId);
+        })->paginate($limit,$columns);
+    }
+
 	public function isOwner($projectId, $userId)
 	{
 		if (count($this->findWhere(['id' => $projectId, 'owner_id' => $userId])) )

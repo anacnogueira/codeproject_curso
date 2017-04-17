@@ -21,9 +21,9 @@ class ProjectTransformer extends TransformerAbstract
 			'progress' => $project->progress,
 			'status' => $project->status,
 			'due_date' => $project->due_date,
-			'is_member' => $project->owner_id != \Authorizer::getResourceOwnderId(),
+			'is_member' => '',
 			'tasks_count' => $project->tasks->count(),
-			'tasks_opened' => $this->CountTasksOpened()
+			'tasks_opened' => $this->CountTasksOpened($project)
 		];
 	}
 

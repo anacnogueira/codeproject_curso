@@ -2,7 +2,7 @@
 
 namespace CodeProject\Repositories;
 
-use CodeProject\Entities\ProjectMembers;
+use CodeProject\Entities\ProjectMember;
 use CodeProject\Presenters\ProjectMemberPresenter;
 use Prettus\Repository\Eloquent\BaseRepository;
 
@@ -20,7 +20,7 @@ class ProjectMembersRepositoryEloquent extends BaseRepository implements Project
      */
     public function model()
     {
-        return ProjectMembers::class;
+        return ProjectMember::class;
     }
 
 
