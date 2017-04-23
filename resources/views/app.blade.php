@@ -96,6 +96,14 @@
 		<script src="{{ asset('build/js/controllers/client/clientRemove.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/client/clientView.js') }}" type="text/javascript"></script>
 		
+		<!-- Projects -->
+		<script src="{{ asset('build/js/controllers/project-note/projectList.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectView.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectNew.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectEdit.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-note/projectRemove.js') }}" type="text/javascript"></script>
+
+
 		<!-- Projects Notes -->
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteList.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteView.js') }}" type="text/javascript"></script>
@@ -105,6 +113,7 @@
 
 		<!-- Services -->
 		<script src="{{ asset('build/js/services/client.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/services/project.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/projectNote.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/user.js') }}" type="text/javascript"></script>
 	@else
