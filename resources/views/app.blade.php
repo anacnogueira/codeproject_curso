@@ -97,11 +97,11 @@
 		<script src="{{ asset('build/js/controllers/client/clientView.js') }}" type="text/javascript"></script>
 		
 		<!-- Projects -->
-		<script src="{{ asset('build/js/controllers/project-note/projectList.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('build/js/controllers/project-note/projectView.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('build/js/controllers/project-note/projectNew.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('build/js/controllers/project-note/projectEdit.js') }}" type="text/javascript"></script>
-		<script src="{{ asset('build/js/controllers/project-note/projectRemove.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project/projectList.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project/projectView.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project/projectNew.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project/projectEdit.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project/projectRemove.js') }}" type="text/javascript"></script>
 
 
 		<!-- Projects Notes -->
