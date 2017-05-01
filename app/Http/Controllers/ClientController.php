@@ -40,8 +40,8 @@ class ClientController extends Controller
         } catch (ValidatorException $e) {
             return Response::json([
                 'error' => true,
-                'message' => $e->getMessageBag();
-            ], 400)
+                'message' => $e->getMessageBag()
+            ], 400);
         }
  
     }
@@ -51,7 +51,7 @@ class ClientController extends Controller
     	try {
             return $this->repository->find($id);
         } catch (\Exception $e) {
-            return $this->erorMsgm('Ocorreu um erro ao exibir o cliente.')
+            return $this->erorMsgm('Ocorreu um erro ao exibir o cliente.');
         }
         return $this->repository->find($id);
     }
@@ -63,7 +63,7 @@ class ClientController extends Controller
         } catch (ModelNotFoundException $e) {
             return Response::json([
                 'error' => true,
-                'message' => $e->getMessageBag();
+                'message' => $e->getMessageBag()
             ], 400);
         }
     }
@@ -100,6 +100,6 @@ class ClientController extends Controller
         return [
             'error' => true,
             'message' => $mensagem
-        ]
+        ];
     }
 }
