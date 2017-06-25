@@ -21,7 +21,7 @@
                         		<td>{{ p.client.name }}</td>
                                 <td>{{ p.progress }}</td>
                                 <td>{{ p.status }}</td>
-                                <td>{{ p.due_date }}</td>
+                                <td>{{ p.due_date | dateBr }}</td>
                         		<td>
                         			<a ng-href="#/projects/{{p.id}}/edit">Editar</a><br>
                                     <a ng-href="#/projects/{{p.id}}/show">Visualizar</a><br>

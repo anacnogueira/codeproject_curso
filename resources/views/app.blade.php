@@ -111,6 +111,9 @@
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteEdit.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteRemove.js') }}" type="text/javascript"></script>
 
+		<!-- Filters -->
+		<script src="{{ asset('build/js/filters/date-br.js') }}" type="text/javascript"></script>
+
 		<!-- Services -->
 		<script src="{{ asset('build/js/services/client.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/project.js') }}" type="text/javascript"></script>
