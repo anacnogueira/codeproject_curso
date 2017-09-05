@@ -1,12 +1,13 @@
 var app = angular.module('app',[
-	'ngRoute','angular-oauth2','app.controllers', 'app.services', 'app.filters'
+	'ngRoute','angular-oauth2','app.controllers', 'app.services',
+	 'app.filters','ui.bootstrap.typeahead', 'ui.bootstrap.tpls'
 ]);
 
 angular.module('app.controllers',['ngMessages','angular-oauth2']);
 angular.module('app.filters',[]);
 angular.module('app.services',['ngResource']);
 
-app.provider('appConfig', ['$httpParamSerializer', function($httpParamSerializer){
+app.provider('appConfig', ['$httpParamSerializerProvider',function($httpParamSerializerProvider){
 	var config = {
 		baseUrl: 'http://projects-api.dev',
 		project:{
@@ -19,7 +20,7 @@ app.provider('appConfig', ['$httpParamSerializer', function($httpParamSerializer
 		utils: {
 			transformRequest: function(data){
 				if(angular.isObject(data)){
-					return $httpParamSerializer.$get()(data);
+					return $httpParamSerializerProvider.$get()(data);
 				}
 				return data;
 			},
