@@ -23,6 +23,11 @@ class ProjectFileRepositoryEloquent extends BaseRepository implements ProjectFil
         return ProjectFile::class;
     }
 
+    public function boot()
+    {
+        $this->pushCriteria(app(RequestCriteria::class));
+    }
+
     /**
     * Specify Validator class name
     *

@@ -5,41 +5,34 @@ use	Illuminate\Contracts\Filesystem\Factory as Storage;
 use Illuminate\Filesystem\Filesystem;
 
 use CodeProject\Repositories\ProjectRepository;
-use CodeProject\Repositories\ProjectMembersRepository;
 use CodeProject\Validators\ProjectValidator;
-use CodeProject\Validators\ProjectMembersValidator;
+use CodeProject\Validators\ProjectFileValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 
 class ProjectService
 {
 	protected $repository;
-	protected $repositoryMembers;
 	protected $validator;
-	protected $validatorMembers;
-	protected $filesystem;
+	protected $fileValidator;
 	protected $storage;
+	protected $fileSystem;
+
 
 	public function __construct(
 		ProjectRepository $repository, 
-		ProjectMembersRepository $repositoryMembers, 
 		ProjectValidator $validator,
-		ProjectMembersValidator $validatorMembers,
+		ProjectFileValidator $fileValidator,
 		Filesystem $filesystem,
 		Storage $storage)
 	{
 		$this->repository 			= $repository;
-		$this->repositoryMembers 	= $repositoryMembers;
-		$this->filesystem 			= $filesystem;
-		$this->storage 				= $storage;	
-
 		$this->validator 			= $validator;
-		$this->validatorMembers 	= $validatorMembers;
+		$this->fileValidator 		= $fileValidator;
+		$this->filesystem 			= $filesystem;
+		$this->storage 				= $storage;
 	}
 
 
-	public function find($id){
-		return $this->repository->find($id);		
-	}
 
 	public function create(array $data)
 	{
@@ -48,13 +41,14 @@ class ProjectService
 			return $this->repository->create($data);
 			
 		} catch (ValidatorException $e) {
+			$error = $e->getMessageBag();
+
 			return [
 				'error' => true,
-				'message' => $e->getMessageBag()
+				'message' => 'Erro ao cadastra o projeto, alguns campos são obrigatórios!',
+				'messages' => $error->getMessages()
 			];
-		}
-
-		
+		}		
 	}
 
 	public function update(array $data, $id)
@@ -64,64 +58,68 @@ class ProjectService
 			return $this->repository->update($data, $id);
 			
 		} catch (ValidatorException $e) {
+			$error = $e->getMessageBag();
+
 			return [
 				'error' => true,
-				'message' => $e->getMessageBag()
-			];
-		}
-
-
-	}
-
-	public function addMember(array $data){
-		try {
-			$this->validatorMembers->with($data)->passesOrFail();
-			return $this->repositoryMembers->create($data);
-			
-		} catch (ValidatorException $e) {
-			return [
-				'error' => true,
-				'message' => $e->getMessageBag()
+				'message' => 'Erro ao atualizar o projeto, alguns campos são obrigatórios!',
+				'messages' => $error->getMessages()
 			];
 		}
 	}
 
-	public function removeMember($id, $memberId){
-		try {
-            $member = $this->repositoryMembers->skipPresenter()->findWhere([
-    			'project_id'=>$id,
-    			'user_id'=>$memberId,
-			])->first();
-			$this->repositoryMembers->delete($member->id);
-
-
-			//$member->repositoryMembers->delete($id, $memberId);
-            return ['success'=>true, 'Membro removido do projeto com sucesso!'];
-        } catch (QueryException $e) {
-            return ['error'=>true, 'O membro não pode ser remoovido.'];
-        
-        } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'Membro não encontrado.'];
-        } catch (\Exception $e) {
-        	print_r($e->getMessage());
-            return ['error'=>true, 'Ocorreu algum erro ao remover o membro.'];
-        }
-	}
-
-	public function isMember($id, $memberId){
-		return $this->repositoryMembers->findWhere([
-			'project_id'=>$id,
-			'user_id' => $memberId
-		]);		
-	}
-
-	public function createFile(array $data)
+	public function addMember($project_id, $member_id)
 	{
-		$project = $this->repository->skipPresenter()->find($data['project_id']);
-		$projectFile = $project->files()->create($data);
+		$project = $this->repository->find($project_id);
 
-		$this->storage->put($projectFile->id.'.'.$data['extension'], $this->filesystem->get($data['file']));
+		if (!$this->isMember($project_id, $member_id)) {
+			$project->members()->attach($member_id);
+		}
 
+		return $project->members()->get();
 	}
+
+	public function removeMember($project_id, $member_id)
+	{
+		$project = $this->repository->find($project_id);
+		$project->members()->detach($member_id);
+		return $project->members()->get();
+	}
+
+	public function isMember($project_id, $member_id)
+	{
+		$project = $this->repository->find($project_id)->members()->find(['member_id' => $member_id]);
+
+		if (count($project)) {
+			return true;
+		}			
+
+		return false;
+	}
+
+	
+
+	private function checkProjectOwner($projectId)
+    {
+        $userId = \Authorizer::getResourceOwnerId();
+
+        return $this->repository->isOwner($projectId, $userId);       
+    }
+
+    private function checkProjectMember($projectId)
+    {
+        $userId = \Authorizer::getResourceOwnerId();
+
+        return $this->repository->hasMember($projectId, $userId);       
+    }
+
+    private function checkProjectPermissions($projectId)
+    {
+        if ($this->checkProjectOwner($projectId) || $this->checkProjectMember($projectId)){
+            return true;
+        }
+
+        return false;
+    }
 
 }

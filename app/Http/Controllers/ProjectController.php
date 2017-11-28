@@ -3,7 +3,6 @@
 namespace CodeProject\Http\Controllers;
 
 use Illuminate\Http\Request;
-use CodeProject\Http\Requests;
 use CodeProject\Services\ProjectService;
 use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Repositories\ProjectTaskRepository;
@@ -37,73 +36,110 @@ class ProjectController extends Controller
         }
     }
 
+    public function projectMembers(Request $request)
+    {
+        try {
+            return $this->repository->findMember(\Authorizer::getResourceId(), $request->query->get('limit')); 
+        } catch (NoActiveAccessTokenExceptionException $e) {
+            return $this->erroMsgm('Usuário não está logado.');
+        } catch (\Exception $e) {
+            return $this->erroMsgm('Ocorreu um erro ao listar os projetos. Erro: '. $e->getMessage());
+        }
+
+    }
+
     public function store(Request $request)
     {
-    	return $this->service->create($request->all());
+    	
+        try {
+            return $this->service->create($request->all());
+        } catch (NoActiveAccessTokenException $e) {
+            $error = $e->getMessageBag();
+
+            return [
+                'error' => true,
+                'message' => 'Erro ao cadastrar o porjeto, alguns campos são obrigatórios',
+                'messages' => $error->getMessages();
+            ];
+            
+        } catch (\Exception $e) {
+            return $this->erroMsgm('Ocorreu um erro ao cadastrar o projeto.');
+        }
     }
 
     public function show($id)
     {
-        if ($this->checkProjectPermissions($id) == false) {
-            return ['error' => 'Access forbidden'];
+        try {
+            return $this->repository->with(['owner', 'client'])->find($id);
+            
+        } catch (ModelNotFoundException $e) {
+            return $this->erroMsgm('Projeto não encontrado.');            
+        } catch (NoActiveAccessTokenException $e) {
+            return $this->erroMsgm('Usuário não está logado.')
+        } catch (\Exception $e) {
+            return $this->erroMsgm('Ocorreu um erro ao exibir o projeto.');        
         }
-
-        return $this->service->find($id);
     }
 
     public function update(Request $request, $id)
     {
-    	if ($this->checkProjectOwner($id) == false) {
-            return ['error' => 'Access forbidden'];
-        }
+    	// if ($this->service->checkProjectOwner($id) == false) {
+     //        return ['error' => 'Access forbidden'];
+     //    }
 
-        return $this->service->update($request->all(), $id);
+     //    
+
+        try {
+          return $this->service->update($request->all(), $id);  
+        } catch (ModelNotFoundException $e) {
+            return $this->erroMsgm('Projeto não encontrado.');            
+        } catch (NoActiveAccessTokenException $e) {
+            return $this->erroMsgm('Usuário não está logado.');
+        } catch (ValidatorException $e) {
+            $error = $e->getMessageBag();
+
+            return [
+                'error' => true,
+                'message' => 'Erro ao atualizar o porjeto, alguns campos são obrigatórios',
+                'messages' => $error->getMessages(),
+            ];
+        } catch (\Exception $e) {
+            return $this->erroMsgm('Ocorreu um erro ao atualizar o projeto.');      
+        }
 
     }
 
     public function destroy($id)
     {
-    	if ($this->checkProjectPermissions($id) == false) {
-            return ['error' => 'Access forbidden'];
-        }
-
-        try {
-            $this->repository->find($id)->delete();
-            return ['success'=>true, 'Projeto deletado com sucesso!'];
+    	try {
+           $this->repository->skipPresenter()->find($id)->delete(); 
         } catch (QueryException $e) {
-            return ['error'=>true, 'Projeto não pode ser apagado pois existe um ou mais clientes vinculados a ele.'];
-        
+            return $this->erroMsgm('Projeto não poder apagado pois existe um ou mais clientes vinvulados a ele.');
         } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'Projeto não encontrado.'];
+            return $this->erroMsgm('Projeto não encontrado.');
+        } catch (NoActiveAccessTokenException $e) {
+            return $this->erroMsgm('Usuário não está logado.');
         } catch (\Exception $e) {
-            return ['error'=>true, 'Ocorreu algum erro ao excluir o projeto.'];
+            return $this->erroMsgm('Ocorreu um erro ao excluir o projeto.');
         }
     }
 
-    private function checkProjectOwner($projectId)
+    public function members($id)
     {
-        $userId = \Authorizer::getResourceOwnerId();
 
-        return $this->repository->isOwner($projectId, $userId);       
     }
 
-    private function checkProjectMember($projectId)
+    public function addMember($project_id, $member_id)
     {
-        $userId = \Authorizer::getResourceOwnerId();
 
-        return $this->repository->hasMember($projectId, $userId);       
     }
 
-    private function checkProjectPermissions($projectId)
+    public function removeMember($project_id, $member_id)
     {
-        if ($this->checkProjectOwner($projectId) || $this->checkProjectMember($projectId)){
-            return true;
-        }
 
-        return false;
-    }
+    }    
 
-        private function erroMsgm($mensagem)
+    private function erroMsgm($mensagem)
     {
         return [
             'error' => true,

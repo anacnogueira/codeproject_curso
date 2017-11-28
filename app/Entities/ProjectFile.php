@@ -3,23 +3,27 @@
 namespace CodeProject\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Prettus\Repository\Contracts\Transformable;
+use Prettus\Repository\Traits\TransformableTrait;
 
-class ProjectFile extends Model
+class ProjectFile extends Model implements Transformable
 {
-    protected $fillable = [
-    	'name',
-    	'description',
-    	'extension',
-    ];
+  use TransformableTrait; 
 
-    public function project()
-    {
-        return $this->belongsTo('CodeProject\Entities\Project');
-    }
+  protected $fillable = [
+  	'name',
+   	'description',
+   	'extension',
+  ];
+
+  public function project()
+  {
+    return $this->belongsTo('CodeProject\Entities\Project');
+  }
 
    
-   	public function getFileName()
-   	{
-   		return $this->id.".".$this->extension;
-   	}
+  public function getFileName()
+  {
+  	return $this->id.".".$this->extension;
+  }
 }

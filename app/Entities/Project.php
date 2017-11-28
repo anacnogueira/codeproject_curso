@@ -16,6 +16,11 @@ class Project extends Model
     	'due_date'
     ];
 
+    public function notes()
+    {
+        return $this->hasMany('CodeProject\Entities\ProjectNote');
+    }
+
     public function owner()
     {
         return $this->belongsTo('CodeProject\Entities\User');
@@ -24,17 +29,7 @@ class Project extends Model
     public function client()
     {
         return $this->belongsTo('CodeProject\Entities\Client');
-    }
-
-    public function notes()
-    {
-        return $this->hasMany('CodeProject\Entities\ProjectNote');
-    }
-
-    public function tasks()
-    {
-        return $this->hasMany('CodeProject\Entities\ProjectTask');
-    }
+    }    
 
     public function members()
     {
@@ -44,5 +39,10 @@ class Project extends Model
     public function files()
     {
         return $this->hasMany('CodeProject\Entities\ProjectFile');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany('CodeProject\Entities\ProjectTask');
     }
 }

@@ -32,9 +32,16 @@
                             <label class="col-md-4 control-label">Due Date</label>
 
                             <div class="col-md-6">
-                                <input type="date" class="form-control" name="due_date" ng-model="project.due_date" required>
+                                <p class="input-group">
+                                    <input type="text" class="form-control" name="due_date" uib-datepicker-popup="dd/MM/yyyy" ng-model="project.due_date" is-open="due_date.status.opened" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </p>
+                                <!--input type="date" class="form-control" name="due_date" ng-model="project.due_date" required-->
                                 <div ng-messages="form.due_date.$error" class="help-block" ng-show="form.due_date.$touched">
                                     <div ng-message="required">Campo obrigatório</div>
+                                    <div ng-message="date">Data Inválida</div>
                                 </div>                                
                             </div>
                         </div> 
@@ -43,13 +50,14 @@
                             <label class="col-md-4 control-label">Client</label>
 
                             <div class="col-md-6">
-                                <select class="form-control" name="client_id" ng-model="project.client_id"
-                                ng-options="o as o.name for o in clients track by o.id" required>
-                                    <option value=""><-- Selecione o cliente --></option>
-                                </select>
+                                <input class="form-control" type="text" name="cliet_id" ng-model="clientSelected" typeahead="o as o.name for o in getClients($viewValue)|limitTo:10" typeahead-input-formatter="formatName($model)"
+                                typeahead-on-select="selectClient($item)"
+                                typeahead-editable="false"
+                                required>  
 
                                 <div ng-messages="form.client_id.$error" class="help-block" ng-show="form.client_id.$touched">
                                     <div ng-message="required">Campo obrigatório</div>
+                                    <div ng-message="editable">Selecione um cliente válido</div>
                                 </div>                                
                             </div>
                         </div> 
