@@ -18,4 +18,14 @@ class ProjectTaskRepositoryEloquent extends BaseRepository implements ProjectTas
     {
         return ProjectTask::class;
     }
+
+    public function presenter()
+    {
+    	return ProjectTaskPresenter::class;
+    }
+
+    public function boot()
+    {
+    	$this->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+    }
 }

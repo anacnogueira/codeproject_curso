@@ -2,24 +2,25 @@
 namespace CodeProject\Services;
 
 use CodeProject\Repositories\ProjectTaskRepository;
+use CodeProject\Repositories\ProjectRepository;
 use CodeProject\Validators\ProjectTaskValidator;
 use \Prettus\Validator\Exceptions\ValidatorException;
 
 class ProjectTaskService
 {
 	protected $repository;
+	protected $projectRepository;
 	protected $validator;
 
-	public function __construct(ProjectTaskRepository $repository, ProjectTaskValidator $validator)
+	public function __construct(ProjectTaskRepository $repository,
+								ProjectRepository $projectRepository,	 
+								ProjectTaskValidator $validator)
 	{
 		$this->repository = $repository;
+		$this->projectRepository = $projectRepository;
 		$this->validator = $validator;
 	}
-
-
-	public function find($id){
-		return $this->repository->find($id);		
-	}
+	
 
 	public function create(array $data)
 	{
@@ -49,8 +50,12 @@ class ProjectTaskService
 				'message' => $e->getMessageBag()
 			];
 		}
-
-
 	}
 
+	public function delete($id)
+	{
+		$projectTask = $this->repository->skipPresenter()->find($id);
+
+		return $projectTask->delete();
+	}
 }

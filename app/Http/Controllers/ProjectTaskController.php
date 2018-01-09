@@ -10,15 +10,10 @@ use CodeProject\Repositories\ProjectTaskRepository;
 class ProjectTaskController extends Controller
 {
 
-    /**
-     * @var ProjectTaskRepository
-     */
+    
     protected $repository;
-
-    /**
-     * @var ProjectTaskValidator
-     */
-    protected $validator;   
+    protected $service;
+  
 
 
    public function __construct(ProjectTaskRepository $repository, ProjectTaskService $service)
@@ -33,33 +28,28 @@ class ProjectTaskController extends Controller
         return $this->repository->findWhere(['project_id'=>$id]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        return $this->service->create($request->all());
+        $data = $request->all();
+        $data['project_id'] = $id;
+
+        return $this->service->create($data);
     }
 
     public function show($id, $taskId)
     {
-        return $this->repository->findWhere(['project_id'=>$id,'id'=>$taskId]);
+        return $this->repository->find($taskId);
     }
 
     public function update(Request $request, $id, $taskId)
     {
+        $data = $request->all();
+        $data['project_id'] = $id;
         return $this->service->update($request->all(), $taskId);
     }
 
-   public function destroy($id, $taskId)
-   {
-        try {
-            $this->repository->find($taskId)->delete();
-            return ['success'=>true, 'Tarefa deletada com sucesso!'];
-        } catch (QueryException $e) {
-            return ['error'=>true, 'Tarefa não pode ser apagada pois existe um ou mais projetos vinculados a ela.'];
-        
-        } catch (ModelNotFoundException $e) {
-            return ['error'=>true, 'Tarefa não encontrada.'];
-        } catch (\Exception $e) {
-            return ['error'=>true, 'Ocorreu algum erro ao excluir a tarefa.'];
-        }
+    public function destroy($id, $taskId)
+    {
+        $this->service->delete($taskId);     
     }
 }

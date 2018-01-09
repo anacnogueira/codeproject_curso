@@ -42,14 +42,14 @@ class ProjectNoteController extends Controller
         return $result;
     }
 
-    public function update(Request $request, $id, $noteId)
+    public function update(Request $request, $id, $idNote)
     {
     	$data = $request->all();
         $data['project_id'] = $id;
-        return $this->service->update($data, $noteId);
+        return $this->service->update($data, $idNote);
     }
 
-     public function destroy($id, $noteId)
+     public function destroy($id, $idNote)
     {
     	try {
             if ($this->repository->skipPresenter()->find($noteId)->delete()){

@@ -28,7 +28,7 @@ Route::group(['middleware'=>'oauth'],function(){
 	//});
 	
 
-	Route::group(['prefix'=>'project'], function(){
+	Route::group(['middleware' => 'check.project.permission', 'prefix'=>'project'], function(){
 		
 		//Notes
 		Route::get('{id}/note', 'ProjectNoteController@index');
@@ -42,8 +42,8 @@ Route::group(['middleware'=>'oauth'],function(){
 		Route::get('file/{fileId}', 'ProjectFileController@show');
 		Route::get('file/{fileId}/download', 'ProjectFileController@showFile');
 		Route::post('{id}/file', 'ProjectFileController@store');
-		Route::put('{id)/file','ProjectFileController@update');
-		Route::delete('{id}/file','ProjectFileController@destroy');
+		Route::put('file/{fileId}','ProjectFileController@update');
+		Route::delete('file/{fileId}','ProjectFileController@destroy');
 
 		//Members
 		Route::get('{id}/members', 'ProjectMembersController@index');

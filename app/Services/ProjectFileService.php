@@ -23,21 +23,39 @@ class ProjectFileService
 
 	}
 
-	public function create()
+	public function create(array $data)
 	{
+		try {
+			$this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
 
+			$project = $this->project;
+		} catch (Exception $e) {
+			
+		}
 	}
 
-	public function update()
+	public function update(array $data, $id)
 	{
+		try {
+			$this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
+			return $this->repository->update($data, $id);
+		} catch (Exception $e) {
+			return [
+				'error' =>true,
+				'message' => $e->getMessageBag()
+			];
+		}
 	}
 
 	public function delete($id)
 	{
 		$projectFile = $this->repository->skipPresenter()->find($id);
-		if ($this->storage->exists()) {
+		if ($this->storage->exists($projectFile->getFileName())) {
+			$this->storage->delete($projectFile->getFileName());
 
+
+			return $projectFile->delete();
 		}
 	}
 
@@ -46,9 +64,17 @@ class ProjectFileService
 
 	}
 
-	public function getBasdeURL()
+	public function getBasdeURL($projectFile)
 	{
-
+		// switch ($this->storage->getDefaultDriver()) {
+		// 	case 'local':
+		// 		return $this->storage->
+		// 		break;
+			
+		// 	default:
+		// 		# code...
+		// 		break;
+		// }
 	}
 
 	public function getFileName()

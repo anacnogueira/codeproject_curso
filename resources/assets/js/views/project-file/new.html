@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Cadastro de Arquivos de Projeto</div>
+                <div class="panel-heading">Cadastro de Arquivo de Projeto</div>
                 <div class="panel-body">
                   
                     <form class="form-horizontal" name="form" role="form" method="POST" ng-submit="save()">                    
@@ -36,6 +36,7 @@
 
                             <div class="col-md-6">
                                <div class="btn btn_info button" ngf-select ng-model="projectFile.file" name="file">Selecione...</div>
+                               {{ projectFile.file.name}}
                                <div ng-messages="from.file.$error" class="help-block" ng-show="form.file.$touched">
                                    <div ng-message="required">Campo Obrigatório</div>
                                </div>

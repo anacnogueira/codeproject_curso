@@ -53,9 +53,14 @@ class ProjectFileController extends Controller
 
     public function showFile($projectId, $id)
     {
+        if ($this->service->checkProjectPermissions($id) == false) {
+            return ['error' => 'Access forbidden'];
+        }
+
         $filePath = $this->service->getFilePath($id);
         $fileContent = file_get_contents($filePath);
         $file64 = base64_encode($fileContent);
+
 
         return [
             'file' => $file64,

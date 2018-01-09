@@ -22,49 +22,21 @@ class ProjectController extends Controller
     {
         $this->repository = $repository;
         $this->service = $service;
-        $this->taskRepository = $taskRepository;
+        $this->middleware('check.project.owner', ['except' => ['store', 'show', 'index']]);
+        $this->middleware('check.project.permission', ['except' => ['index', 'store', 'update', 'destroy']]);
     }
 
     public function index(Request $request)
     {
-    	try {
-            return $this->repository->findOwner(Authorizer::getResourceOwnerId(), $request->query->get('limit'));
-        } catch (NoActiveAccessTokenException $e) {
-            return $this->erroMsgm('Usuário não está logado.');
-        } catch (\Exception $e) {
-            return $this->erroMsgm('Ocorreu um erro ao listar os projetos. Erro: ' . $e->getMessage());
-        }
+    	return $this->repository->findWithOwnerAndMember(\Authorizer::getResourceId());
     }
-
-    public function projectMembers(Request $request)
-    {
-        try {
-            return $this->repository->findMember(\Authorizer::getResourceId(), $request->query->get('limit')); 
-        } catch (NoActiveAccessTokenExceptionException $e) {
-            return $this->erroMsgm('Usuário não está logado.');
-        } catch (\Exception $e) {
-            return $this->erroMsgm('Ocorreu um erro ao listar os projetos. Erro: '. $e->getMessage());
-        }
-
-    }
+    
 
     public function store(Request $request)
     {
     	
-        try {
-            return $this->service->create($request->all());
-        } catch (NoActiveAccessTokenException $e) {
-            $error = $e->getMessageBag();
-
-            return [
-                'error' => true,
-                'message' => 'Erro ao cadastrar o porjeto, alguns campos são obrigatórios',
-                'messages' => $error->getMessages();
-            ];
-            
-        } catch (\Exception $e) {
-            return $this->erroMsgm('Ocorreu um erro ao cadastrar o projeto.');
-        }
+       return $this->service->create($request->all());
+      
     }
 
     public function show($id)

@@ -112,14 +112,32 @@
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteEdit.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/controllers/project-note/projectNoteRemove.js') }}" type="text/javascript"></script>
 
+		<!-- Projects Files -->
+		<script src="{{ asset('build/js/controllers/project-file/projectFileList.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-file/projectFileView.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-file/projectFileNew.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-file/projectFileEdit.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-file/projectFileRemove.js') }}" type="text/javascript"></script>
+
+		<!-- Projects Tasks -->
+		<script src="{{ asset('build/js/controllers/project-task/projectTaskList.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-task/projectTaskView.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-task/projectTaskNew.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-task/projectTaskEdit.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/controllers/project-task/projectTaskRemove.js') }}" type="text/javascript"></script>
+
 		<!-- Filters -->
 		<script src="{{ asset('build/js/filters/date-br.js') }}" type="text/javascript"></script>
+
+		<!-- Directives -->
+		<script src="{{ asset('build/js/directives/projectFileDownload.js') }}" type="text/javascript"></script>
 
 		<!-- Services -->
 		<script src="{{ asset('build/js/services/url.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/client.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/project.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/projectNote.js') }}" type="text/javascript"></script>
+		<script src="{{ asset('build/js/services/projectFile.js') }}" type="text/javascript"></script>
 		<script src="{{ asset('build/js/services/user.js') }}" type="text/javascript"></script>
 	@else
 		<script src="{{ elixir('js/all.js') }}" type="text/javascript"></script>
